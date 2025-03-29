@@ -1,0 +1,19 @@
+import { getTypeColor } from "./utils";
+
+<let/pokemon=input.pokemon />
+
+<div class="bg-gray-800 rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow">
+    <img 
+        src=`https://img.pokemondb.net/artwork/large/${pokemon.name}.jpg`
+        alt=pokemon.name
+        class="w-32 h-32 mx-auto"
+    />
+    <h2 class="text-xl font-bold text-center capitalize mt-2">${pokemon.name}</h2>
+    <div class="flex gap-2 justify-center mt-2">
+        <for|type| of=pokemon.types>
+            <span class=`px-2 py-1 rounded-full text-sm ${getTypeColor(type)}`>
+                ${type}
+            </span>
+        </for>
+    </div>
+</div>
