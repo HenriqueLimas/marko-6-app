@@ -1,9 +1,11 @@
 import { getTypeColor } from "./utils";
 
 <let/pokemon=input.pokemon />
+<const/url=new URL($global.request.url) />
+<const/isSlow=url.searchParams.get('slow') === 'true' />
 
 <a 
-  href=`/pokemon/${pokemon.name}`
+  href=`/pokemon/${pokemon.name}${isSlow ? '?slow=true' : ''}`
   class="block bg-gray-800 rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow"
 >
     <img 

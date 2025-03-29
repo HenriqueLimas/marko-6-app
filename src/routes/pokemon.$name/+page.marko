@@ -1,9 +1,10 @@
-import { getTypeColor } from "../../tags/pokemon/utils";
+<const/url=new URL($global.request.url) />
+<const/isSlow=url.searchParams.get('slow') === 'true' />
 
 <div class="container mx-auto px-4 py-8">
   <!-- Back Button -->
   <a 
-    href="/"
+    href=`/${isSlow ? '?slow=true' : ''}`
     class="inline-flex items-center mb-6 text-blue-400 hover:text-blue-300"
   >
     <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">

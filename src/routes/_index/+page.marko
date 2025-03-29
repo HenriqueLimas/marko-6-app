@@ -6,7 +6,9 @@
 
   <script>
     if (searchQuery !== null) {
-      pokemonRequest = fetch(`/?q=${searchQuery}&slow=true`, {
+      const params = new URLSearchParams(location.search);
+      params.set('q', searchQuery);
+      pokemonRequest = fetch(`/?${params.toString()}`, {
           method: 'GET',
           headers: {
             'accept': 'application/json'
