@@ -2,7 +2,10 @@ import { getTypeColor } from "./utils";
 
 <let/pokemon=input.pokemon />
 
-<div class="bg-gray-800 rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow">
+<a 
+  href=`/pokemon/${pokemon.name}`
+  class="block bg-gray-800 rounded-lg shadow-lg p-4 hover:shadow-xl transition-shadow"
+>
     <img 
         src=`https://img.pokemondb.net/artwork/large/${pokemon.name}.jpg`
         alt=pokemon.name
@@ -16,4 +19,4 @@ import { getTypeColor } from "./utils";
             </span>
         </for>
     </div>
-</div>
+</a>

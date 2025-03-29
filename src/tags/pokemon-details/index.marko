@@ -1,0 +1,65 @@
+import { getTypeColor } from "../pokemon/utils";
+
+<let/pokemon=input.pokemon />
+
+<div class="bg-gray-800 rounded-lg shadow-xl p-8">
+  <!-- Pokemon Header -->
+  <div class="flex flex-col md:flex-row items-center gap-8">
+    <div class="w-64 h-64 relative">
+      <img 
+        src=pokemon.sprite
+        alt=pokemon.name
+        class="w-full h-full object-contain"
+      />
+    </div>
+    
+    <div class="flex-1 text-center md:text-left">
+      <div class="flex items-center justify-center md:justify-start gap-4">
+        <h1 class="text-4xl font-bold capitalize">${pokemon.name}</h1>
+        <span class="text-2xl text-gray-400">#${pokemon.id.toString().padStart(3, '0')}</span>
+      </div>
+      
+      <!-- Types -->
+      <div class="flex gap-2 justify-center md:justify-start mt-4">
+        <for|type| of=pokemon.types>
+          <span class=`px-4 py-1 rounded-full text-sm ${getTypeColor(type)}`>
+            ${type}
+          </span>
+        </for>
+      </div>
+    </div>
+  </div>
+
+  <!-- Stats -->
+  <div class="mt-8">
+    <h2 class="text-2xl font-bold mb-4">Base Stats</h2>
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+      <for|stat| of=pokemon.stats>
+        <div class="bg-gray-700 rounded-lg p-4">
+          <div class="flex justify-between mb-2">
+            <span class="capitalize">${stat.name}</span>
+            <span>${stat.value}</span>
+          </div>
+          <div class="w-full bg-gray-600 rounded-full h-2">
+            <div 
+              class="bg-blue-500 rounded-full h-2" 
+              style=`width: ${(stat.value / 255) * 100}%`
+            />
+          </div>
+        </div>
+      </for>
+    </div>
+  </div>
+
+  <!-- Abilities -->
+  <div class="mt-8">
+    <h2 class="text-2xl font-bold mb-4">Abilities</h2>
+    <div class="flex flex-wrap gap-2">
+      <for|ability| of=pokemon.abilities>
+        <span class="px-4 py-2 bg-gray-700 rounded-full capitalize">
+          ${ability}
+        </span>
+      </for>
+    </div>
+  </div>
+</div> 

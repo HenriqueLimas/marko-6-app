@@ -1,0 +1,33 @@
+import { getTypeColor } from "../../tags/pokemon/utils";
+
+<div class="container mx-auto px-4 py-8">
+  <!-- Back Button -->
+  <a 
+    href="/"
+    class="inline-flex items-center mb-6 text-blue-400 hover:text-blue-300"
+  >
+    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
+    </svg>
+    Back to Pokédex
+  </a>
+
+  <try>
+    <@placeholder>
+      <div class="flex justify-center items-center min-h-[400px]">
+        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"/>
+      </div>
+    </@placeholder>
+
+    <await|pokemon|=$global.pokemonRequest>
+      <pokemon-details pokemon=pokemon />
+    </await>
+
+    <@catch>
+      <div class="text-center py-16">
+        <h2 class="text-2xl font-bold text-red-500">Pokemon not found</h2>
+        <p class="mt-2 text-gray-400">Please check the Pokemon name and try again</p>
+      </div>
+    </@catch>
+  </try>
+</div> 
