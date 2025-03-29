@@ -1,23 +1,15 @@
-<div.mouse-mask style=`--mouse-x:${state.x};--mouse-y:${state.y};`/>
+<let/x="center"/>
+<let/y="center"/>
+<div.mouse-mask style=`--mouse-x:${x};--mouse-y:${y};`/>
 
-class {
-  onCreate() {
-    this.state = { x: "center", y: "center" };
-    this.boundMove = this.move.bind(this);
-  }
-  onMount() {
-    window.addEventListener("mousemove", this.boundMove);
-  }
-  onDestroy() {
-    window.removeEventListener("mousemove", this.boundMove);
-  }
-  move(e) {
-    this.state.x = e.clientX + "px";
-    this.state.y = e.clientY + "px";
-  }
-}
+<script>
+  window.addEventListener("mousemove", (event) => {
+    x = event.clientX + "px";
+    y = event.clientY + "px";
+  }, { signal: $signal })
+</script>
 
-style {
+<style>
   .mouse-mask {    
     position: fixed;
     top:0; bottom:0; right:0; left:0;
@@ -39,4 +31,4 @@ style {
       black 50%
     );
   }
-}
+</style>

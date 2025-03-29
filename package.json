@@ -4,7 +4,7 @@
   "version": "1.0.0",
   "type": "module",
   "dependencies": {
-    "marko": "^5.37.20"
+    "marko": "^6.0.0-next.3.69"
   },
   "devDependencies": {
     "@marko/run": "^0.6.1"
