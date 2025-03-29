@@ -6,7 +6,7 @@
 
   <script>
     if (searchQuery !== null) {
-      pokemonRequest = fetch(`/?q=${searchQuery}`, {
+      pokemonRequest = fetch(`/?q=${searchQuery}&slow=true`, {
           method: 'GET',
           headers: {
             'accept': 'application/json'
@@ -14,6 +14,11 @@
           signal: $signal
         })
           .then(res => res.json())
+          .catch(err => {
+            if (err.name !== 'AbortError') {
+              console.error(err)
+            }
+          })
     }
   </script>
 
@@ -54,7 +59,7 @@
     </@placeholder>
     <await|pokemons|=pokemonRequest>
       <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        <for|pokemon| of=pokemons>
+        <for|pokemon| of=pokemons by=pokemon => pokemon.name>
           <pokemon pokemon=pokemon />
         </for>
       </div>
