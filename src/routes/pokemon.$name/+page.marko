@@ -1,13 +1,13 @@
 <const/url=$global.url />
 <const/isSlow=url.searchParams.get('slow') === 'true' />
 
-<div class="container mx-auto px-4 py-8">
+<div class="pokemon-page">
   <!-- Back Button -->
   <a 
     href=`/${isSlow ? '?slow=true' : ''}`
-    class="inline-flex items-center mb-6 text-blue-400 hover:text-blue-300"
+    class="back-button"
   >
-    <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+    <svg class="back-button__icon" fill="none" stroke="currentColor" viewBox="0 0 24 24">
       <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"/>
     </svg>
     Back to Pokédex
@@ -15,8 +15,8 @@
 
   <try>
     <@placeholder>
-      <div class="flex justify-center items-center min-h-[400px]">
-        <div class="animate-spin rounded-full h-16 w-16 border-t-2 border-b-2 border-blue-500"/>
+      <div class="loading-spinner">
+        <div class="loading-spinner__circle"></div>
       </div>
     </@placeholder>
 
@@ -25,10 +25,74 @@
     </await>
 
     <@catch>
-      <div class="text-center py-16">
-        <h2 class="text-2xl font-bold text-red-500">Pokemon not found</h2>
-        <p class="mt-2 text-gray-400">Please check the Pokemon name and try again</p>
+      <div class="error-message">
+        <h2 class="error-message__title">Pokemon not found</h2>
+        <p class="error-message__text">Please check the Pokemon name and try again</p>
       </div>
     </@catch>
   </try>
-</div> 
+</div>
+
+<style>
+  .pokemon-page {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem 1rem;
+  }
+
+  .back-button {
+    display: inline-flex;
+    align-items: center;
+    margin-bottom: 1.5rem;
+    color: #60a5fa;
+  }
+
+  .back-button:hover {
+    color: #93c5fd;
+  }
+
+  .back-button__icon {
+    width: 1.5rem;
+    height: 1.5rem;
+    margin-right: 0.5rem;
+  }
+
+  .loading-spinner {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 400px;
+  }
+
+  .loading-spinner__circle {
+    width: 4rem;
+    height: 4rem;
+    border: 2px solid transparent;
+    border-top-color: #3b82f6;
+    border-bottom-color: #3b82f6;
+    border-radius: 50%;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    to {
+      transform: rotate(360deg);
+    }
+  }
+
+  .error-message {
+    text-align: center;
+    padding: 4rem 0;
+  }
+
+  .error-message__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    color: #ef4444;
+  }
+
+  .error-message__text {
+    margin-top: 0.5rem;
+    color: #9ca3af;
+  }
+</style> 

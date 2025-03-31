@@ -5,14 +5,11 @@
   "type": "module",
   "dependencies": {
     "@marko/run-adapter-netlify": "^1.0.1",
-    "@tailwindcss/vite": "^4.0.17",
-    "marko": "^6.0.0-next"
+    "marko": "^6.0.0-next",
+    "normalize.css": "^8.0.1"
   },
   "devDependencies": {
-    "@marko/run": "^0.6.2",
-    "autoprefixer": "^10.4.21",
-    "postcss": "^8.5.3",
-    "tailwindcss": "^4.0.17"
+    "@marko/run": "^0.6.2"
   },
   "overrides": {
     "@marko/run": {

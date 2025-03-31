@@ -2,27 +2,26 @@ import { getTypeColor } from "../pokemon/utils";
 
 <let/pokemon=input.pokemon />
 
-<div class="bg-gray-800 rounded-lg shadow-xl p-8">
+<div class="pokemon-details">
   <!-- Pokemon Header -->
-  <div class="flex flex-col md:flex-row items-center gap-8">
-    <div class="w-64 h-64 relative">
+  <div class="pokemon-details__header">
+    <div class="pokemon-details__image">
       <img 
         src=pokemon.sprite
         alt=pokemon.name
-        class="w-full h-full object-contain"
       />
     </div>
     
-    <div class="flex-1 text-center md:text-left">
-      <div class="flex items-center justify-center md:justify-start gap-4">
-        <h1 class="text-4xl font-bold capitalize">${pokemon.name}</h1>
-        <span class="text-2xl text-gray-400">#${pokemon.id.toString().padStart(3, '0')}</span>
+    <div class="pokemon-details__info">
+      <div class="pokemon-details__title">
+        <h1 class="pokemon-details__name">${pokemon.name}</h1>
+        <span class="pokemon-details__id">#${pokemon.id.toString().padStart(3, '0')}</span>
       </div>
       
       <!-- Types -->
-      <div class="flex gap-2 justify-center md:justify-start mt-4">
+      <div class="pokemon-details__types">
         <for|type| of=pokemon.types>
-          <span class=`px-4 py-1 rounded-full text-sm ${getTypeColor(type)}`>
+          <span class=`pokemon-details__type pokemon-type--${type}`>
             ${type}
           </span>
         </for>
@@ -31,18 +30,18 @@ import { getTypeColor } from "../pokemon/utils";
   </div>
 
   <!-- Stats -->
-  <div class="mt-8">
-    <h2 class="text-2xl font-bold mb-4">Base Stats</h2>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+  <div class="stats">
+    <h2 class="stats__title">Base Stats</h2>
+    <div class="stats__grid">
       <for|stat| of=pokemon.stats>
-        <div class="bg-gray-700 rounded-lg p-4">
-          <div class="flex justify-between mb-2">
-            <span class="capitalize">${stat.name}</span>
-            <span>${stat.value}</span>
+        <div class="stat-card">
+          <div class="stat-card__header">
+            <span class="stat-card__name">${stat.name}</span>
+            <span class="stat-card__value">${stat.value}</span>
           </div>
-          <div class="w-full bg-gray-600 rounded-full h-2">
+          <div class="stat-card__bar">
             <div 
-              class="bg-blue-500 rounded-full h-2" 
+              class="stat-card__bar-fill" 
               style=`width: ${(stat.value / 255) * 100}%`
             />
           </div>
@@ -52,14 +51,153 @@ import { getTypeColor } from "../pokemon/utils";
   </div>
 
   <!-- Abilities -->
-  <div class="mt-8">
-    <h2 class="text-2xl font-bold mb-4">Abilities</h2>
-    <div class="flex flex-wrap gap-2">
+  <div class="abilities">
+    <h2 class="abilities__title">Abilities</h2>
+    <div class="abilities__list">
       <for|ability| of=pokemon.abilities>
-        <span class="px-4 py-2 bg-gray-700 rounded-full capitalize">
+        <span class="ability-tag">
           ${ability}
         </span>
       </for>
     </div>
   </div>
-</div> 
+</div>
+
+<style>
+  .pokemon-details {
+    background-color: #1f2937;
+    border-radius: 0.5rem;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    padding: 2rem;
+  }
+
+  .pokemon-details__header {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 2rem;
+  }
+
+  @media (min-width: 768px) {
+    .pokemon-details__header {
+      flex-direction: row;
+    }
+  }
+
+  .pokemon-details__image {
+    width: 16rem;
+    height: 16rem;
+    position: relative;
+  }
+
+  .pokemon-details__image img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+
+  .pokemon-details__info {
+    flex: 1;
+  }
+
+  .pokemon-details__title {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+
+  .pokemon-details__name {
+    font-size: 2rem;
+    font-weight: bold;
+    text-transform: capitalize;
+  }
+
+  .pokemon-details__id {
+    font-size: 1.5rem;
+    color: #9ca3af;
+  }
+
+  .pokemon-details__types {
+    display: flex;
+    gap: 0.5rem;
+  }
+
+  .pokemon-details__type {
+    padding: 0.5rem 1rem;
+    border-radius: 9999px;
+    font-size: 1rem;
+    text-transform: capitalize;
+  }
+
+  .stats {
+    margin-top: 2rem;
+  }
+
+  .stats__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .stats__grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .stat-card {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+  }
+
+  .stat-card__header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .stat-card__name {
+    text-transform: capitalize;
+  }
+
+  .stat-card__value {
+    font-weight: bold;
+  }
+
+  .stat-card__bar {
+    height: 0.5rem;
+    background-color: #374151;
+    border-radius: 9999px;
+    overflow: hidden;
+  }
+
+  .stat-card__bar-fill {
+    height: 100%;
+    background-color: #3b82f6;
+    border-radius: 9999px;
+  }
+
+  .abilities {
+    margin-top: 2rem;
+  }
+
+  .abilities__title {
+    font-size: 1.5rem;
+    font-weight: bold;
+    margin-bottom: 1rem;
+  }
+
+  .abilities__list {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+  }
+
+  .ability-tag {
+    padding: 0.5rem 1rem;
+    background-color: #374151;
+    border-radius: 9999px;
+    text-transform: capitalize;
+  }
+</style> 
