@@ -2,5 +2,7 @@
   command = "npm run build"
   publish = "dist/public"
 
-[functions]
-  directory = "netlify/functions" 
+[[edge_functions]]
+  path = "/*"
+  excludedPath = ["/*.css", "/*.js"]
+  function = "index"

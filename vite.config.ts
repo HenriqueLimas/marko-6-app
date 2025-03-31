@@ -7,7 +7,7 @@ export default defineConfig({
   plugins: [
     tailwindcss(),
     marko({
-      adapter: netlify()
+      adapter: netlify({ edge: true})
     })
   ],
 })
