@@ -1,50 +1,56 @@
 <!-- Pokemon Grid -->
 <let/pokemonRequest=input.pokemonRequest/>
 
+<const/fetchPokemon({ signal, offset, searchQuery }) {
+    const params = new URLSearchParams(location.search);
+
+    if (searchQuery) {
+        params.set("q", searchQuery);
+    }
+
+    if (offset) {
+        params.set("offset", offset);
+    }
+
+    return fetch(`/?${params.toString()}`, {
+        method: "GET",
+        headers: {
+            accept: "application/json",
+        },
+        signal,
+    })
+        .then((res) => res.json())
+        .catch((err) => {
+            if (err.name !== "AbortError") {
+                console.error(err);
+            }
+        });
+}/>
+
 <script>
-    if (pokemonRequest && input.searchQuery !== null) {
-        const params = new URLSearchParams(location.search);
-        params.set("q", input.searchQuery);
-        pokemonRequest = fetch(`/?${params.toString()}`, {
-            method: "GET",
-            headers: {
-                accept: "application/json",
-            },
+    if (input.pokemonRequest && input.searchQuery !== null) {
+        pokemonRequest = fetchPokemon({
+            searchQuery: input.searchQuery,
             signal: $signal,
-        })
-            .then((res) => res.json())
-            .catch((err) => {
-                if (err.name !== "AbortError") {
-                    console.error(err);
-                }
-            });
+        });
     }
 </script>
 
 <script>
     if (input.offset) {
         const observer = new IntersectionObserver((entries) => {
-            entries.forEach((entry) => {
+            for (const entry of entries) {
                 if (entry.isIntersecting) {
-                    const params = new URLSearchParams(location.search);
-                    params.set("offset", input.offset);
-                    pokemonRequest = fetch(`/?${params.toString()}`, {
-                        method: "GET",
-                        headers: {
-                            accept: "application/json",
-                        },
+                    pokemonRequest = fetchPokemon({
+                        offset: input.offset,
+                        searchQuery: input.searchQuery,
                         signal: $signal,
-                    })
-                        .then((res) => res.json())
-                        .catch((err) => {
-                            if (err.name !== "AbortError") {
-                                console.error(err);
-                            }
-                        });
+                    });
                     observer.disconnect();
                     visibleHint().remove();
+                    break;
                 }
-            });
+            }
         });
         observer.observe(visibleHint());
         $signal.onabort = () => observer.disconnect();
@@ -59,7 +65,7 @@
             </for>
         </@placeholder>
         <await|pokemons|=pokemonRequest>
-            <for|pokemon| of=pokemons.results by=((pokemon) => pokemon.name)>
+            <for|pokemon| of=pokemons.results by="name">
                 <pokemon pokemon=pokemon/>
             </for>
 

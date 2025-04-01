@@ -1,24 +1,26 @@
-<let/pokemon=input.pokemon />
-<const/url=$global.url />
-<const/isSlow=url.searchParams.get('slow') === 'true' />
+<let/pokemon=input.pokemon/>
+<const/url=$global.url/>
+<const/isSlow=url.searchParams.get("slow") === "true"/>
 
-<a 
-  href=`/pokemon/${pokemon.name}${isSlow ? '?slow=true' : ''}`
+<a
+  href=`/pokemon/${pokemon.name}${isSlow ? "?slow=true" : ""}`
   class="pokemon-card"
 >
-    <img 
-        src=`https://img.pokemondb.net/artwork/large/${pokemon.name}.jpg`
-        alt=pokemon.name
-        class="pokemon-card__image"
-    />
-    <h2 class="pokemon-card__name">${pokemon.name}</h2>
-    <div class="pokemon-card__types">
-        <for|type| of=pokemon.types>
-            <span class=`pokemon-card__type pokemon-card__type--${type}`>
-                ${type}
-            </span>
-        </for>
-    </div>
+  <img
+    src=`https://img.pokemondb.net/artwork/large/${pokemon.name}.jpg`
+    alt=pokemon.name
+    class="pokemon-card__image"
+  >
+  <h2 class="pokemon-card__name">
+    ${pokemon.name}
+  </h2>
+  <div class="pokemon-card__types">
+    <for|type| of=pokemon.types>
+      <span class=`pokemon-card__type pokemon-card__type--${type}`>
+        ${type}
+      </span>
+    </for>
+  </div>
 </a>
 
 <style>
