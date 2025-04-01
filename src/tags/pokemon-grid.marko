@@ -1,0 +1,91 @@
+<!-- Pokemon Grid -->
+<let/pokemonRequest=input.pokemonRequest/>
+
+<script>
+    if (pokemonRequest && input.searchQuery !== null) {
+        const params = new URLSearchParams(location.search);
+        params.set("q", input.searchQuery);
+        pokemonRequest = fetch(`/?${params.toString()}`, {
+            method: "GET",
+            headers: {
+                accept: "application/json",
+            },
+            signal: $signal,
+        })
+            .then((res) => res.json())
+            .catch((err) => {
+                if (err.name !== "AbortError") {
+                    console.error(err);
+                }
+            });
+    }
+</script>
+
+<script>
+    if (input.offset) {
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach((entry) => {
+                if (entry.isIntersecting) {
+                    const params = new URLSearchParams(location.search);
+                    params.set("offset", input.offset);
+                    pokemonRequest = fetch(`/?${params.toString()}`, {
+                        method: "GET",
+                        headers: {
+                            accept: "application/json",
+                        },
+                        signal: $signal,
+                    })
+                        .then((res) => res.json())
+                        .catch((err) => {
+                            if (err.name !== "AbortError") {
+                                console.error(err);
+                            }
+                        });
+                    observer.disconnect();
+                    visibleHint().remove();
+                }
+            });
+        });
+        observer.observe(visibleHint());
+        $signal.onabort = () => observer.disconnect();
+    }
+</script>
+
+<if=pokemonRequest>
+    <try>
+        <@placeholder>
+            <for|i| of=Array(50) by=((i) => i)>
+                <div class="pokemon-grid__skeleton"/>
+            </for>
+        </@placeholder>
+        <await|pokemons|=pokemonRequest>
+            <for|pokemon| of=pokemons.results by=((pokemon) => pokemon.name)>
+                <pokemon pokemon=pokemon/>
+            </for>
+
+            <pokemon-grid offset=pokemons.offset searchQuery=input.searchQuery/>
+        </await>
+    </try>
+</if>
+
+<div/visibleHint style="position:relative"/>
+
+<style>
+    .pokemon-grid__skeleton {
+        width: 100%;
+        height: 207px;
+        background-color: #374151;
+        border-radius: 0.5rem;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+</style>

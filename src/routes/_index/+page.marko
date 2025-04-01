@@ -1,72 +1,43 @@
 <div class="pokedex">
-  <h1 class="pokedex__title">Pokédex</h1>
-  
-  <let/pokemonRequest=$global.pokemonRequest />
-  <let/searchQuery=null />
+  <h1 class="pokedex__title">
+    Pokédex
+  </h1>
 
-  <script>
-    if (searchQuery !== null) {
-      const params = new URLSearchParams(location.search);
-      params.set('q', searchQuery);
-      pokemonRequest = fetch(`/?${params.toString()}`, {
-          method: 'GET',
-          headers: {
-            'accept': 'application/json'
-          },
-          signal: $signal
-        })
-          .then(res => res.json())
-          .catch(err => {
-            if (err.name !== 'AbortError') {
-              console.error(err)
-            }
-          })
-    }
-  </script>
+  <let/searchQuery=null/>
 
-  <form 
+  <form
     class="search-form"
     action="/"
-    on-submit=(e => {
-      e.preventDefault();
-    })
-    on-input=(e => {
-      searchQuery = e.target.value
-    })
+    on-submit=(
+      (e) => {
+        e.preventDefault();
+      }
+    )
+    on-input=(
+      (e) => {
+        searchQuery = e.target.value;
+      }
+    )
   >
     <div class="search-form__container">
-      <input 
+      <input
         type="search"
         name="q"
         placeholder="Search Pokemon..."
         class="search-form__input"
-      />
-      <button 
-        type="submit"
-        class="search-form__button"
       >
+      <button type="submit" class="search-form__button">
         Search
       </button>
     </div>
   </form>
-
   <!-- Pokemon Grid -->
-  <try>
-    <@placeholder>
-      <div class="pokemon-grid">
-        <for|i| of=Array(50)>
-          <div class="pokemon-grid__skeleton"></div>
-        </for>
-      </div>
-    </@placeholder>
-    <await|pokemons|=pokemonRequest>
-      <div class="pokemon-grid">
-        <for|pokemon| of=pokemons by=pokemon => pokemon.name>
-          <pokemon pokemon=pokemon />
-        </for>
-      </div>
-    </await>
-  </try>
+  <div class="pokemon-grid">
+    <pokemon-grid
+      pokemonRequest=$global.pokemonRequest
+      searchQuery=searchQuery
+    />
+  </div>
 </div>
 
 <style>
@@ -154,19 +125,20 @@
   }
 
   .pokemon-grid__skeleton {
-    width: 8rem;
-    height: 8rem;
+    width: 100%;
+    height: 207px;
     background-color: #374151;
     border-radius: 0.5rem;
     animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
   }
 
   @keyframes pulse {
-    0%, 100% {
+    0%,
+    100% {
       opacity: 1;
     }
     50% {
-      opacity: .5;
+      opacity: 0.5;
     }
   }
 </style>

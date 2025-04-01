@@ -1,23 +1,21 @@
-import { getTypeColor } from "../pokemon/utils";
-
-<let/pokemon=input.pokemon />
+<let/pokemon=input.pokemon/>
 
 <div class="pokemon-details">
   <!-- Pokemon Header -->
   <div class="pokemon-details__header">
     <div class="pokemon-details__image">
-      <img 
-        src=pokemon.sprite
-        alt=pokemon.name
-      />
+      <img src=pokemon.sprite alt=pokemon.name>
     </div>
-    
+
     <div class="pokemon-details__info">
       <div class="pokemon-details__title">
-        <h1 class="pokemon-details__name">${pokemon.name}</h1>
-        <span class="pokemon-details__id">#${pokemon.id.toString().padStart(3, '0')}</span>
+        <h1 class="pokemon-details__name">
+          ${pokemon.name}
+        </h1>
+        <span class="pokemon-details__id">
+          #${pokemon.id.toString().padStart(3, "0")}
+        </span>
       </div>
-      
       <!-- Types -->
       <div class="pokemon-details__types">
         <for|type| of=pokemon.types>
@@ -28,20 +26,25 @@ import { getTypeColor } from "../pokemon/utils";
       </div>
     </div>
   </div>
-
   <!-- Stats -->
   <div class="stats">
-    <h2 class="stats__title">Base Stats</h2>
+    <h2 class="stats__title">
+      Base Stats
+    </h2>
     <div class="stats__grid">
       <for|stat| of=pokemon.stats>
         <div class="stat-card">
           <div class="stat-card__header">
-            <span class="stat-card__name">${stat.name}</span>
-            <span class="stat-card__value">${stat.value}</span>
+            <span class="stat-card__name">
+              ${stat.name}
+            </span>
+            <span class="stat-card__value">
+              ${stat.value}
+            </span>
           </div>
           <div class="stat-card__bar">
-            <div 
-              class="stat-card__bar-fill" 
+            <div
+              class="stat-card__bar-fill"
               style=`width: ${(stat.value / 255) * 100}%`
             />
           </div>
@@ -49,10 +52,11 @@ import { getTypeColor } from "../pokemon/utils";
       </for>
     </div>
   </div>
-
   <!-- Abilities -->
   <div class="abilities">
-    <h2 class="abilities__title">Abilities</h2>
+    <h2 class="abilities__title">
+      Abilities
+    </h2>
     <div class="abilities__list">
       <for|ability| of=pokemon.abilities>
         <span class="ability-tag">
@@ -200,4 +204,4 @@ import { getTypeColor } from "../pokemon/utils";
     border-radius: 9999px;
     text-transform: capitalize;
   }
-</style> 
+</style>

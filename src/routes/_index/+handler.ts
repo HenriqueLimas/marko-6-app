@@ -1,17 +1,24 @@
 export async function GET(context) {
     const url = new URL(context.request.url)
     const query = url.searchParams.get('q') || ''
+    const offset = url.searchParams.get('offset') || ''
 
-    const pokemonRequest = fetch('https://pokeapi.co/api/v2/pokemon?limit=151')
+    const LIMIT = 151
+    const pokemonRequest = fetch(`https://pokeapi.co/api/v2/pokemon?limit=${LIMIT}${offset ? `&offset=${offset}` : ''}`)
         .then(res => res.json())
-        .then(data => data.results)
-        .then(async (pokemons) => {
-            // simulate a slow response            
+        .then(async (data) => {
+            // simulate a slow response
             if (url.searchParams.get('slow')) {
                 await new Promise(resolve => setTimeout(resolve, 1000));
             }
 
-            return pokemons.filter(pokemon => pokemon.name.toLowerCase().includes(query.toLowerCase()));
+            const offset = data.next ? parseInt(new URL(data.next).searchParams.get('offset') || '') : null
+
+            return {
+                limit: LIMIT,
+                offset,
+                results: data.results.filter(pokemon => pokemon.name.toLowerCase().includes(query.toLowerCase()))
+            }
         })
 
     if (context.request.headers.get('accept') === 'application/json') {
