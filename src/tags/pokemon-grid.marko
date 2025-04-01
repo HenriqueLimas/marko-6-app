@@ -23,6 +23,7 @@
         .catch((err) => {
             if (err.name !== "AbortError") {
                 console.error(err);
+                throw err;
             }
         });
 }/>
@@ -64,6 +65,9 @@
                 <div class="pokemon-grid__skeleton"/>
             </for>
         </@placeholder>
+        <@catch>
+            <h1>Error fetching Pokemons</h1>
+        </@catch>
         <await|pokemons|=pokemonRequest>
             <for|pokemon| of=pokemons.results by="name">
                 <pokemon pokemon=pokemon/>
