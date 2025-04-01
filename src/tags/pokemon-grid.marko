@@ -69,7 +69,12 @@
                 <pokemon pokemon=pokemon/>
             </for>
 
-            <pokemon-grid offset=pokemons.offset searchQuery=input.searchQuery/>
+            <if=pokemons.offset>
+                <pokemon-grid
+                    offset=pokemons.offset
+                    searchQuery=input.searchQuery
+                />
+            </if>
         </await>
     </try>
 </if>

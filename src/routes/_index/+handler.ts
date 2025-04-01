@@ -13,11 +13,12 @@ export async function GET(context) {
             }
 
             const offset = data.next ? parseInt(new URL(data.next).searchParams.get('offset') || '') : null
+            const results = data.results.filter(pokemon => pokemon.name.toLowerCase().includes(query.toLowerCase()))
 
             return {
                 limit: LIMIT,
-                offset,
-                results: data.results.filter(pokemon => pokemon.name.toLowerCase().includes(query.toLowerCase()))
+                offset: results.length >= LIMIT ? offset : null,
+                results
             }
         })
 
