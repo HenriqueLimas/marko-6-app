@@ -1,0 +1,43 @@
+import {
+    QueryClient,
+    QueryObserver,
+    notifyManager,
+} from "@tanstack/query-core";
+static const queryClient = new QueryClient();
+
+<lifecycle
+    onMount() {
+        queryClient.mount();
+    }
+    onDestroy() {
+        queryClient.unmount();
+    }
+/>
+
+<const/queryOptions=input.options/>
+
+<let/result/>
+<let/$observer/>
+<script>
+    const options = queryClient.defaultQueryOptions(queryOptions);
+    let obs = $observer;
+    if (!$observer) {
+        obs = new QueryObserver(queryClient, options);
+        $observer = obs;
+    } else {
+        $observer.setOptions(options);
+    }
+    const unsubscribe = obs.subscribe(
+        notifyManager.batchCalls((queryResult) => {
+            result = queryResult;
+        }),
+    );
+    $signal.onabort = () => {
+        unsubscribe();
+        queryClient.cancelQueries(options);
+    };
+</script>
+
+<log=result/>
+
+<return=result/>

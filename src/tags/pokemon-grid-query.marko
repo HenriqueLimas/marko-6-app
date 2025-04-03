@@ -25,26 +25,28 @@
         });
 }/>
 
-<query/data options={
-    queryKey: ["pokemon", input.searchQuery],
-    queryFn: () => fetchPokemon({
-        signal: $signal,
-        offset: input.offset,
-        searchQuery: input.searchQuery,
-    }),
-    staleTime: Infinity,
-} />
+<const/searchQuery=input.searchQuery || ""/>
 
-<if=data.result?.isPending>
+<create-query/query options={
+    queryKey: ["pokemon", searchQuery],
+    queryFn: () =>
+        fetchPokemon({
+            signal: $signal,
+            offset: input.offset,
+            searchQuery,
+        }),
+}/>
+
+<if=query?.isPending>
     <for|i| of=Array(50) by=((i) => i)>
         <div class="pokemon-grid__skeleton"/>
     </for>
 </if>
-<else if=data.result?.isError>
+<else if=query?.isError>
     <h1>Error fetching Pokemons</h1>
 </else>
-<else if=data.result?.isSuccess>
-    <for|pokemon| of=data.result.data.results by="name">
+<else if=query?.isSuccess>
+    <for|pokemon| of=(query.data.results) by="name">
         <pokemon pokemon=pokemon/>
     </for>
 </else>
