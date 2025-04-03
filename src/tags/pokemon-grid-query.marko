@@ -25,15 +25,13 @@
         });
 }/>
 
-<const/searchQuery=input.searchQuery || ""/>
-
 <create-query/query options={
-    queryKey: ["pokemon", searchQuery],
+    queryKey: ["pokemon", input.searchQuery],
     queryFn: () =>
         fetchPokemon({
             signal: $signal,
             offset: input.offset,
-            searchQuery,
+            searchQuery: input.searchQuery,
         }),
 }/>
 

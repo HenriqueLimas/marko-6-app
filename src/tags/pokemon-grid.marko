@@ -1,7 +1,5 @@
 <!-- Pokemon Grid -->
-<let/pokemonRequest=input.pokemonRequest/>
-
-<const/fetchPokemon({ signal, offset, searchQuery }) {
+static function fetchPokemon({ signal, offset, searchQuery }) {
     const params = new URLSearchParams(location.search);
 
     if (searchQuery) {
@@ -18,72 +16,54 @@
             accept: "application/json",
         },
         signal,
-    })
-        .then((res) => res.json())
-        .catch((err) => {
-            if (err.name !== "AbortError") {
-                console.error(err);
-                throw err;
-            }
-        });
-}/>
+    }).then((res) => res.json());
+}
 
-<script>
-    if (input.pokemonRequest && input.searchQuery !== null) {
-        pokemonRequest = fetchPokemon({
-            searchQuery: input.searchQuery,
-            signal: $signal,
-        });
-    }
-</script>
+<const/pokemonRequest=(
+    input.searchQuery || input.offset
+        ? fetchPokemon({
+              signal: $signal,
+              offset: input.offset,
+              searchQuery: input.searchQuery,
+          })
+        : input.pokemonRequest
+)/>
 
-<script>
-    if (input.offset) {
-        const observer = new IntersectionObserver((entries) => {
-            for (const entry of entries) {
-                if (entry.isIntersecting) {
-                    pokemonRequest = fetchPokemon({
-                        offset: input.offset,
-                        searchQuery: input.searchQuery,
-                        signal: $signal,
-                    });
-                    observer.disconnect();
-                    visibleHint().remove();
-                    break;
-                }
-            }
-        });
-        observer.observe(visibleHint());
-        $signal.onabort = () => observer.disconnect();
-    }
-</script>
+<try>
+    <@placeholder>
+        <for to="50">
+            <div class="pokemon-grid__skeleton"/>
+        </for>
+    </@placeholder>
+    <@catch|error|>
+        <log=error/>
+    </@catch>
+    <await|pokemons|=pokemonRequest>
+        <for|pokemon| of=pokemons.results by="name">
+            <pokemon pokemon=pokemon/>
+        </for>
 
-<if=pokemonRequest>
-    <try>
-        <@placeholder>
-            <for|i| of=Array(50) by=((i) => i)>
-                <div class="pokemon-grid__skeleton"/>
-            </for>
-        </@placeholder>
-        <@catch>
-            <h1>Error fetching Pokemons</h1>
-        </@catch>
-        <await|pokemons|=pokemonRequest>
-            <for|pokemon| of=pokemons.results by="name">
-                <pokemon pokemon=pokemon/>
-            </for>
-
-            <if=pokemons.offset>
-                <pokemon-grid
-                    offset=pokemons.offset
-                    searchQuery=input.searchQuery
-                />
-            </if>
-        </await>
-    </try>
-</if>
-
-<div/visibleHint style="position:relative"/>
+        <let/visible=false/>
+        <if=visible && pokemons.offset>
+            <pokemon-grid offset=pokemons.offset searchQuery=input.searchQuery/>
+        </if>
+        <else if=pokemons.offset>
+            <div/visibleHint style="position:relative"/>
+            <script>
+                const observer = new IntersectionObserver((entries) => {
+                    for (const entry of entries) {
+                        if (entry.isIntersecting) {
+                            visible = true;
+                            break;
+                        }
+                    }
+                });
+                observer.observe(visibleHint());
+                $signal.onabort = () => observer.disconnect();
+            </script>
+        </else>
+    </await>
+</try>
 
 <style>
     .pokemon-grid__skeleton {
