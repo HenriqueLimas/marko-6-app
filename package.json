@@ -5,6 +5,7 @@
   "type": "module",
   "dependencies": {
     "@marko/run-adapter-netlify": "^1.0.1",
+    "@tanstack/query-core": "^5.71.5",
     "marko": "^6.0.0-next",
     "normalize.css": "^8.0.1"
   },

@@ -1,0 +1,70 @@
+<const/fetchPokemon({ signal, offset, searchQuery }) {
+    const params = new URLSearchParams(location.search);
+
+    if (searchQuery) {
+        params.set("q", searchQuery);
+    }
+
+    if (offset) {
+        params.set("offset", offset);
+    }
+
+    return fetch(`/?${params.toString()}`, {
+        method: "GET",
+        headers: {
+            accept: "application/json",
+        },
+        signal,
+    })
+        .then((res) => res.json())
+        .catch((err) => {
+            if (err.name !== "AbortError") {
+                console.error(err);
+                throw err;
+            }
+        });
+}/>
+
+<query/data options={
+    queryKey: ["pokemon", input.searchQuery],
+    queryFn: () => fetchPokemon({
+        signal: $signal,
+        offset: input.offset,
+        searchQuery: input.searchQuery,
+    }),
+    staleTime: Infinity,
+} />
+
+<if=data.result?.isPending>
+    <for|i| of=Array(50) by=((i) => i)>
+        <div class="pokemon-grid__skeleton"/>
+    </for>
+</if>
+<else if=data.result?.isError>
+    <h1>Error fetching Pokemons</h1>
+</else>
+<else if=data.result?.isSuccess>
+    <for|pokemon| of=data.result.data.results by="name">
+        <pokemon pokemon=pokemon/>
+    </for>
+</else>
+
+<style>
+    .pokemon-grid__skeleton {
+        width: 100%;
+        height: 207px;
+        background-color: #374151;
+        border-radius: 0.5rem;
+        animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    }
+
+    @keyframes pulse {
+        0%,
+        100% {
+            opacity: 1;
+        }
+        50% {
+            opacity: 0.5;
+        }
+    }
+</style>
