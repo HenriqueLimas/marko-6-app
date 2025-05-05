@@ -1,0 +1,153 @@
+import { getCoreRowModel, type ColumnDef } from "@tanstack/table-core";
+import { flexRender } from "./flex-render";
+static type Person = {
+    firstName: string
+    lastName: string
+    age: number
+    visits: number
+    status: string
+    progress: number
+};
+static const defaultData: Person[] = [
+    {
+        firstName: "tanner",
+        lastName: "linsley",
+        age: 24,
+        visits: 100,
+        status: "In Relationship",
+        progress: 50,
+    },
+    {
+        firstName: "tandy",
+        lastName: "miller",
+        age: 40,
+        visits: 40,
+        status: "Single",
+        progress: 80,
+    },
+    {
+        firstName: "joe",
+        lastName: "dirte",
+        age: 45,
+        visits: 20,
+        status: "Complicated",
+        progress: 10,
+    },
+];
+static const columns: ColumnDef<Person>[] = [
+    {
+        accessorKey: "firstName",
+        cell: (info) => info.getValue(),
+        footer: (info) => info.column.id,
+    },
+    {
+        accessorFn: (row) => row.lastName,
+        id: "lastName",
+        cell: (info) => info.getValue(),
+        header: () => "Last Name",
+        footer: (info) => info.column.id,
+    },
+    {
+        accessorKey: "age",
+        header: () => "Age",
+        footer: (info) => info.column.id,
+    },
+    {
+        accessorKey: "visits",
+        header: () => "Visits",
+        footer: (info) => info.column.id,
+    },
+    {
+        accessorKey: "status",
+        header: "Status",
+        footer: (info) => info.column.id,
+    },
+    {
+        accessorKey: "progress",
+        header: "Profile Progress",
+        footer: (info) => info.column.id,
+    },
+];
+
+<create-marko-table/table={
+    columns,
+    data: defaultData,
+    getCoreRowModel: getCoreRowModel(),
+}/>
+
+<style>
+    table {
+        border: 1px solid lightgray;
+    }
+
+    tbody {
+        border-bottom: 1px solid lightgray;
+    }
+
+    th {
+        border-bottom: 1px solid lightgray;
+        border-right: 1px solid lightgray;
+        padding: 2px 4px;
+    }
+
+    tfoot {
+        color: gray;
+    }
+
+    tfoot th {
+        font-weight: normal;
+    }
+</style>
+
+<div class="p-2">
+    <table>
+        <thead>
+            <for|headerGroup| of=table.getHeaderGroups()>
+                <tr>
+                    <for|header| of=headerGroup.headers>
+                        <th>
+                            <if=!header.isPlaceholder>
+                                ${flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext(),
+                                )}
+                            </if>
+                        </th>
+                    </for>
+                </tr>
+            </for>
+        </thead>
+
+        <tbody>
+            <for|row| of=(table.getRowModel().rows)>
+                <tr>
+                    <for|cell| of=row.getVisibleCells()>
+                        <td>
+                            ${flexRender(
+                                cell.column.columnDef.cell,
+                                cell.getContext(),
+                            )}
+                        </td>
+                    </for>
+                </tr>
+            </for>
+        </tbody>
+
+        <tfoot>
+            <for|footerGroup| of=table.getFooterGroups()>
+                <tr>
+                    <for|header| of=footerGroup.headers>
+                        <th>
+                            <if=!header.isPlaceholder>
+                                ${flexRender(
+                                    header.column.columnDef.header,
+                                    header.getContext(),
+                                )}
+                            </if>
+                        </th>
+                    </for>
+                </tr>
+            </for>
+        </tfoot>
+    </table>
+</div>

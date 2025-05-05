@@ -1,0 +1,33 @@
+import {
+    createTable,
+    type RowData,
+    type TableOptions,
+} from "@tanstack/table-core";
+export interface Input<TData extends RowData> {
+    value: TableOptions<TData>;
+}
+
+<const/createMarkoTable=(
+    () => {
+        const table = createTable({
+            onStateChange() {},
+            state: {},
+            renderFallbackValue: null,
+            ...input.value,
+        });
+
+        const state = table.initialState;
+        table.setOptions((prev) => ({
+            ...prev,
+            ...input.value,
+            state: {
+                ...state,
+                ...input.value.state,
+            },
+        }));
+
+        return table;
+    }
+)/>
+
+<return=createMarkoTable()/>
