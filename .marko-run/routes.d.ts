@@ -14,6 +14,8 @@ declare module "@marko/run" {
 		routes: {
 			"/": Routes["/_index"];
 			"/pokemon-query": Routes["/pokemon-query"];
+			"/async": Routes["/async"];
+			"/immer": Routes["/immer"];
 			"/pokemon/:name": Routes["/pokemon/$name"];
 			"/table": Routes["/table"];
 		}
@@ -64,6 +66,28 @@ declare module "../src/routes/pokemon-query.+page.marko" {
   }
 }
 
+declare module "../src/routes/async/+page.marko" {
+  namespace MarkoRun {
+    export { NotHandled, NotMatched, GetPaths, PostPaths, GetablePath, GetableHref, PostablePath, PostableHref, Platform };
+    export type Route = Run.Routes["/async"];
+    export type Context = Run.MultiRouteContext<Route> & Marko.Global;
+    export type Handler = Run.HandlerLike<Route>;
+    /** @deprecated use `((context, next) => { ... }) satisfies MarkoRun.Handler` instead */
+    export const route: Run.HandlerTypeFn<Route>;
+  }
+}
+
+declare module "../src/routes/immer/+page.marko" {
+  namespace MarkoRun {
+    export { NotHandled, NotMatched, GetPaths, PostPaths, GetablePath, GetableHref, PostablePath, PostableHref, Platform };
+    export type Route = Run.Routes["/immer"];
+    export type Context = Run.MultiRouteContext<Route> & Marko.Global;
+    export type Handler = Run.HandlerLike<Route>;
+    /** @deprecated use `((context, next) => { ... }) satisfies MarkoRun.Handler` instead */
+    export const route: Run.HandlerTypeFn<Route>;
+  }
+}
+
 declare module "../src/routes/pokemon.$name/+page.marko" {
   namespace MarkoRun {
     export { NotHandled, NotMatched, GetPaths, PostPaths, GetablePath, GetableHref, PostablePath, PostableHref, Platform };
@@ -92,7 +116,7 @@ declare module "../src/routes/+layout.marko" {
   }
   namespace MarkoRun {
     export { NotHandled, NotMatched, GetPaths, PostPaths, GetablePath, GetableHref, PostablePath, PostableHref, Platform };
-    export type Route = Run.Routes["/" | "/pokemon-query" | "/pokemon/:name" | "/table"];
+    export type Route = Run.Routes["/" | "/pokemon-query" | "/async" | "/immer" | "/pokemon/:name" | "/table"];
     export type Context = Run.MultiRouteContext<Route> & Marko.Global;
     export type Handler = Run.HandlerLike<Route>;
     /** @deprecated use `((context, next) => { ... }) satisfies MarkoRun.Handler` instead */
@@ -103,6 +127,8 @@ declare module "../src/routes/+layout.marko" {
 type Routes = {
 	"/_index": { verb: "get"; meta: typeof import("../src/routes/_index/+meta.json"); };
 	"/pokemon-query": { verb: "get"; };
+	"/async": { verb: "get"; };
+	"/immer": { verb: "get"; };
 	"/pokemon/$name": { verb: "get"; };
 	"/table": { verb: "get"; };
 }

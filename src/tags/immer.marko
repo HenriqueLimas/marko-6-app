@@ -1,0 +1,13 @@
+import { produce } from "immer";
+export interface Input<T = undefined> {
+    value: T;
+}
+
+<let/state=input.value/>
+<const/setState=(
+    function setState<T = typeof input.value>(callback: (draft: T) => void) {
+        state = produce(state, callback);
+    }
+)/>
+
+<return=([state, setState] as [typeof state, typeof setState])/>

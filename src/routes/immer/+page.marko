@@ -1,0 +1,23 @@
+<immer/[todos, setTodos]=[
+    { id: 0, text: "Learn Marko" },
+    { id: 1, text: "Make a Website" },
+]/>
+
+<ul>
+    <for|todo, i| of=todos by=((todo) => todo.id)>
+        <li>
+            <id/checkboxId/>
+            <input type="checkbox" id=checkboxId>
+            <label for=checkboxId>
+                ${todo.text}
+            </label>
+            <button onClick() {
+                setTodos((draft) => {
+                    draft.splice(i, 1);
+                });
+            }>
+                &times;
+            </button>
+        </li>
+    </for>
+</ul>
